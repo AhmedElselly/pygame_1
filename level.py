@@ -13,6 +13,8 @@ class Level():
         # general setup
         self.display_surface = surface
         self.world_shift = 0
+        self.player_on_ground = False
+        self.current_x = None
 
         # player setup
         player_layout = import_csv_layout(level_data['player'])
@@ -142,7 +144,8 @@ class Level():
     def horizontal_movement_collision(self):
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
-        collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palms_sprites.sprites()
+        collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + \
+            self.fg_palms_sprites.sprites()
         for sprite in collidable_sprites:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
@@ -163,7 +166,8 @@ class Level():
     def vertical_movement_collision(self):
         player = self.player.sprite
         player.apply_gravity()
-        collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palms_sprites.sprites()
+        collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + \
+            self.fg_palms_sprites.sprites()
         for sprite in collidable_sprites:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
@@ -178,6 +182,37 @@ class Level():
             player.on_ground = False
         if player.on_ceiling and player.direction.y > 0:
             player.on_ceiling = False
+
+    def scroll_x(self):
+        player = self.player.sprite
+        player_x = player.rect.centerx
+        direction_x = player.direction.x
+
+        if player_x < screen_width / 4 and direction_x < 0:
+            self.world_shift = 8
+            player.speed = 0
+        elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
+            self.world_shift = -8
+            player.speed = 0
+        else:
+            self.world_shift = 0
+            player.speed = 8
+
+    def get_player_on_ground(self):
+        if self.player.sprite.on_ground:
+            self.player_on_ground = True
+        else:
+            self.player_on_ground = False
+
+    def create_landing_dust(self):
+        if not self.player_on_ground and self.player.sprite.on_ground and not self.dust_sprite.sprites():
+            if self.player.sprite.facing_right:
+                offset = pygame.math.Vector2(10, 15)
+            else:
+                offset = pygame.math.Vector2(-10, 15)
+            fall_dust_particle = ParticleEffect(
+                self.player.sprite.rect.midbottom - offset, 'land')
+            self.dust_sprite.add(fall_dust_particle)
 
     def run(self):
         # sky
@@ -213,10 +248,17 @@ class Level():
         self.fg_palms_sprites.update(self.world_shift)
         self.fg_palms_sprites.draw(self.display_surface)
 
+        # dust particles
+        self.dust_sprite.update(self.world_shift)
+        self.dust_sprite.draw(self.display_surface)
+
         # player
         self.player.update()
         self.horizontal_movement_collision()
+        self.get_player_on_ground()
         self.vertical_movement_collision()
+        self.create_landing_dust()
+        self.scroll_x()
         self.player.draw(self.display_surface)
         self.goal.update(self.world_shift)
         self.goal.draw(self.display_surface)
