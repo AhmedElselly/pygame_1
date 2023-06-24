@@ -1,0 +1,69 @@
+{
+    "activeFile": "/media/ahmedelselly/New Volume/python/games/levels/level0.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "/media/ahmedelselly/New Volume/python/games/levels/coin_tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/media/ahmedelselly/New Volume/python/games/levels/crate.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/media/ahmedelselly/New Volume/python/games/levels/enemy_tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/media/ahmedelselly/New Volume/python/games/levels/grass.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/media/ahmedelselly/New Volume/python/games/levels/level0.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 3388,
+                "y": 461
+            }
+        },
+        "/media/ahmedelselly/New Volume/python/games/levels/palms.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/media/ahmedelselly/New Volume/python/games/levels/setup_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/media/ahmedelselly/New Volume/python/games/levels/terrain_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "openFiles": [
+        "/media/ahmedelselly/New Volume/python/games/levels/level0.tmx",
+        "/media/ahmedelselly/New Volume/python/games/levels/terrain_tiles.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/coin_tiles.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/grass.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/palms.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/crate.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/setup_tiles.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/enemy_tiles.tsx"
+    ],
+    "project": "",
+    "recentFiles": [
+        "/media/ahmedelselly/New Volume/python/games/levels/enemy_tiles.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/setup_tiles.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/crate.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/palms.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/grass.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/coin_tiles.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/terrain_tiles.tsx",
+        "/media/ahmedelselly/New Volume/python/games/levels/level0.tmx"
+    ]
+}
