@@ -1,6 +1,7 @@
 import pygame, sys
 from settings import *
 from level import Level
+from game import Game
 from game_data import level_0
 
 pygame.init()
@@ -8,7 +9,8 @@ pygame.init()
 # screen = pygame.display.set_mode((screen_width, screen_height))
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
-level = Level(level_0, screen)
+# level = Level(level_0, screen)
+game = Game(screen)
 
 while True:
     for event in pygame.event.get():
@@ -17,7 +19,7 @@ while True:
             exit()
     
     screen.fill('grey')
-    level.run()
+    game.run()
 
     pygame.display.update()
     clock.tick(60)
