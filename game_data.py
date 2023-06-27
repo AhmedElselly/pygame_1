@@ -24,7 +24,7 @@ level_1 = {
     'grass': './levels/1/level1_grass.csv',
     'node_pos': (300, 220),
     'unlock': 2,
-    'node_graphics': './gui/graphics/overworld/0'
+    'node_graphics': './gui/graphics/overworld/1'
 }
 level_2 = {
     'terrain': './levels/2/level2_terrain.csv',
@@ -38,7 +38,7 @@ level_2 = {
     'grass': './levels/2/level2_grass.csv',
     'node_pos': (480, 610),
     'unlock': 3,
-    'node_graphics': './gui/graphics/overworld/0'
+    'node_graphics': './gui/graphics/overworld/2'
 }
 level_3 = {
     'terrain': './levels/3/level3_terrain.csv',
@@ -52,7 +52,7 @@ level_3 = {
     'grass': './levels/3/level3_grass.csv',
     'node_pos': (610, 350),
     'unlock': 4,
-    'node_graphics': './gui/graphics/overworld/0'
+    'node_graphics': './gui/graphics/overworld/3'
 }
 level_4 = {
     'terrain': './levels/4/level4_terrain.csv',
@@ -66,7 +66,7 @@ level_4 = {
     'grass': './levels/4/level4_grass.csv',
     'node_pos': (880, 210),
     'unlock': 5,
-    'node_graphics': './gui/graphics/overworld/0'
+    'node_graphics': './gui/graphics/overworld/4'
 }
 level_5 = {
     'terrain': './levels/5/level5_terrain.csv',
@@ -80,7 +80,7 @@ level_5 = {
     'grass': './levels/5/level5_grass.csv',
     'node_pos': (1050, 400),
     'unlock': 6,
-    'node_graphics': './gui/graphics/overworld/0'
+    'node_graphics': './gui/graphics/overworld/5'
 }
 
 levels = {
