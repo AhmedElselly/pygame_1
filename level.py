@@ -8,8 +8,9 @@ from player import Player
 from particles import ParticleEffect
 from game_data import levels
 
+
 class Level():
-    def __init__(self, current_level, surface, create_overworld):
+    def __init__(self, current_level, surface, create_overworld, change_coins):
         # general setup
         self.display_surface = surface
         self.world_shift = 0
@@ -27,6 +28,9 @@ class Level():
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
         self.player_setup(player_layout)
+
+        # user interface
+        self.change_coins = change_coins
 
         # dust setup
         self.dust_sprite = pygame.sprite.GroupSingle()
@@ -92,10 +96,10 @@ class Level():
                     if type == 'coins':
                         if val == '0':
                             sprite = Coin(tile_size, x, y,
-                                          './gui/graphics/coins/gold')
+                                          './gui/graphics/coins/gold', 5)
                         if val == '1':
                             sprite = Coin(tile_size, x, y,
-                                          './gui/graphics/coins/silver')
+                                          './gui/graphics/coins/silver', 1)
 
                     if type == 'fg_palms':
                         if val == '0':
@@ -228,6 +232,26 @@ class Level():
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
             self.create_overworld(self.current_level, self.new_max_level)
 
+    def check_coin_collisions(self):
+        collided_coins = pygame.sprite.spritecollide(
+            self.player.sprite, self.coin_sprites, True)
+
+        if collided_coins:
+            for coin in collided_coins:
+                self.change_coins(coin.value)
+
+    def check_enemy_collisions(self):
+        enemy_collisions = pygame.sprite.spritecollide(
+            self.player.sprite, self.enemy_sprites, False)
+
+        if enemy_collisions:
+            for enemy in enemy_collisions:
+                enemy_center = enemy.rect.centery
+                enemy_top = enemy.rect.top
+                player_bottom = self.player.sprite.rect.bottom
+                if enemy_top < player_bottom < enemy_center and self.player.sprite.direction.y > 0:
+                    enemy.kill()
+
     def run(self):
         # sky
         self.sky.draw(self.display_surface)
@@ -278,6 +302,10 @@ class Level():
         self.goal.draw(self.display_surface)
         self.check_death()
         self.check_win()
+
+        # ui
+        self.check_coin_collisions()
+        self.check_enemy_collisions()
 
         # water
         self.water.draw(self.display_surface, self.world_shift)
