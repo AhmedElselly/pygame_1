@@ -10,7 +10,7 @@ from game_data import levels
 
 
 class Level():
-    def __init__(self, current_level, surface, create_overworld, change_coins):
+    def __init__(self, current_level, surface, create_overworld, change_coins, change_health):
         # general setup
         self.display_surface = surface
         self.world_shift = 0
@@ -27,13 +27,16 @@ class Level():
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
-        self.player_setup(player_layout)
+        self.player_setup(player_layout, change_health)
 
         # user interface
         self.change_coins = change_coins
 
         # dust setup
         self.dust_sprite = pygame.sprite.GroupSingle()
+
+        # enemy explosion
+        self.explosion_sprites = pygame.sprite.Group()
 
         # terrain setup
         terrain_layout = import_csv_layout(level_data['terrain'])
@@ -128,14 +131,14 @@ class Level():
             if pygame.sprite.spritecollide(enemy, self.constraint_sprites, False):
                 enemy.reverse()
 
-    def player_setup(self, layout):
+    def player_setup(self, layout, change_health):
         for row_index, row in enumerate(layout):
             for col_index, val in enumerate(row):
                 x = col_index * tile_size
                 y = row_index * tile_size
                 if val == '0':
                     sprite = Player((x, y), self.display_surface,
-                                    self.create_jump_particles)
+                                    self.create_jump_particles, change_health)
                     self.player.add(sprite)
                 if val == '1':
                     hat_surface = pygame.image.load(
@@ -250,7 +253,12 @@ class Level():
                 enemy_top = enemy.rect.top
                 player_bottom = self.player.sprite.rect.bottom
                 if enemy_top < player_bottom < enemy_center and self.player.sprite.direction.y > 0:
+                    self.player.sprite.direction.y = -15
+                    explosion_sprite = ParticleEffect(enemy.rect.center, 'explosion')
+                    self.explosion_sprites.add(explosion_sprite)
                     enemy.kill()
+                else:
+                    self.player.sprite.get_damage()
 
     def run(self):
         # sky
@@ -269,6 +277,8 @@ class Level():
         self.constraint_sprites.update(self.world_shift)
         self.enemy_collision_reverse()
         self.enemy_sprites.draw(self.display_surface)
+        self.explosion_sprites.update(self.world_shift)
+        self.explosion_sprites.draw(self.display_surface)
 
         # crate render
         self.crate_sprites.update(self.world_shift)
