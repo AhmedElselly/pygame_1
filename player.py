@@ -17,6 +17,8 @@ class Player(pygame.sprite.Sprite):
         self.speed = 8
         self.gravity = 0.8
         self.jump_speed = -16
+        self.collision_rect = pygame.Rect(
+            self.rect.topleft, (50, self.rect.height))
 
         # player status
         self.status = 'idle'
@@ -42,7 +44,7 @@ class Player(pygame.sprite.Sprite):
 
     def import_character_assets(self):
         character_path = './gui/graphics/character/'
-        self.animations = {'idle': [], 'run': [], 'jump': [], 'fall': []}
+        self.animations = {'idle': [], 'run': [], 'jump': [], 'fall': [], 'attack_1': []}
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
@@ -57,15 +59,15 @@ class Player(pygame.sprite.Sprite):
             if self.dust_frame_index >= len(self.dust_run_particles):
                 self.dust_frame_index = 0
 
-            dust_particles = self.dust_run_particles[int(self.dust_frame_index)]
-            
+            dust_particles = self.dust_run_particles[int(
+                self.dust_frame_index)]
+
             if self.facing_right:
                 pos = self.rect.bottomleft - pygame.math.Vector2(6, 10)
                 self.display_surface.blit(dust_particles, pos)
             if self.facing_left:
                 pos = self.rect.bottomright - pygame.math.Vector2(6, 10)
                 self.display_surface.blit(dust_particles, pos)
-
 
     def animate(self):
         animation = self.animations[self.status]
@@ -76,30 +78,34 @@ class Player(pygame.sprite.Sprite):
         image = animation[int(self.frame_index)]
         if self.facing_right:
             self.image = image
+            self.rect.bottomleft = self.collision_rect.bottomleft
         else:
             flipped_image = pygame.transform.flip(image, True, False)
             self.image = flipped_image
             self.facing_left = True
+            self.rect.bottomright = self.collision_rect.bottomright
 
         if self.invincible:
             alpha = self.wave_value()
             self.image.set_alpha(alpha)
         else:
             self.image.set_alpha(255)
+            
+        self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
 
-        # set the rect
-        if self.on_ground and self.on_right:
-            self.rect = self.image.get_rect(bottomright=self.rect.bottomright)
-        elif self.on_ground and self.on_left:
-            self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
-        elif self.on_ground:
-            self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
-        elif self.on_ceiling and self.on_right:
-            self.rect = self.image.get_rect(topright=self.rect.topright)
-        elif self.on_ceiling and self.on_left:
-            self.rect = self.image.get_rect(topright=self.rect.topleft)
-        elif self.on_ceiling:
-            self.rect = self.image.get_rect(midtop=self.rect.midtop)
+        # # set the rect
+        # if self.on_ground and self.on_right:
+        #     self.rect = self.image.get_rect(bottomright=self.rect.bottomright)
+        # elif self.on_ground and self.on_left:
+        #     self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
+        # elif self.on_ground:
+        #     self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
+        # elif self.on_ceiling and self.on_right:
+        #     self.rect = self.image.get_rect(topright=self.rect.topright)
+        # elif self.on_ceiling and self.on_left:
+        #     self.rect = self.image.get_rect(topright=self.rect.topleft)
+        # elif self.on_ceiling:
+        #     self.rect = self.image.get_rect(midtop=self.rect.midtop)
 
     def get_input(self):
         keys = pygame.key.get_pressed()
@@ -122,7 +128,7 @@ class Player(pygame.sprite.Sprite):
 
     def apply_gravity(self):
         self.direction.y += self.gravity
-        self.rect.y += self.direction.y
+        self.collision_rect.y += self.direction.y
 
     def jump(self):
         self.direction.y = self.jump_speed
@@ -155,8 +161,10 @@ class Player(pygame.sprite.Sprite):
 
     def wave_value(self):
         value = sin(pygame.time.get_ticks())
-        if value >= 0: return 255
-        else: return 0
+        if value >= 0:
+            return 255
+        else:
+            return 0
 
     def update(self):
         self.get_input()

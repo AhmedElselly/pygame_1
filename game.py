@@ -8,7 +8,7 @@ from ui import UI
 class Game:
     def __init__(self, screen):
         # game attributes
-        self.max_level = 0
+        self.max_level = 3
         self.cur_health = 100
         self.max_health = 100
         self.coins = 0
@@ -46,6 +46,8 @@ class Game:
             self.cur_health = 100
             self.coins = 0
             self.max_level = 0
+            self.overworld = Overworld(0, self.max_level, self.screen, self.create_level)
+            self.status = 'overworld'
 
     def run(self):
         if self.status == self.overworld_status:
@@ -54,3 +56,4 @@ class Game:
             self.level.run()
             self.ui.show_health(self.cur_health, self.max_health)
             self.ui.show_coins(self.coins)
+            self.check_game_over()
